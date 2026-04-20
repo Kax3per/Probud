@@ -1,24 +1,66 @@
 import { useState, useMemo } from "react";
 
+/**
+ * CostCalculator Component (Interactive Pricing Estimator)
+ * ---------------------------------------------------------
+ * Section focused on:
+ * - Helping users estimate project cost
+ * - Increasing engagement via interaction
+ * - Educating users on cost factors
+ *
+ * Responsibilities:
+ * - Manage user inputs (type, size, standard, floors, garage)
+ * - Calculate dynamic price based on selections
+ * - Provide instant visual feedback (live updates)
+ *
+ * UX Concept:
+ * - Interactive decision-making tool
+ * - Immediate feedback loop (real-time price)
+ * - Simplified complexity (few inputs → clear output)
+ */
 export default function CostCalculator() {
+
+  /**
+   * STATE MANAGEMENT
+   * -----------------
+   * Controls all calculator inputs
+   */
   const [size, setSize] = useState(120);
   const [standard, setStandard] = useState("medium");
   const [type, setType] = useState("house");
   const [floors, setFloors] = useState(1);
   const [garage, setGarage] = useState(false);
 
+  /**
+   * BASE PRICE CONFIG
+   * Price per m² depending on project type
+   */
   const basePrice = {
     house: 5500,
     apartment: 4500,
     commercial: 7000,
   };
 
+  /**
+   * STANDARD MULTIPLIER
+   * Adjusts price depending on finish level
+   */
   const standardMultiplier = {
     basic: 0.85,
     medium: 1,
     premium: 1.4,
   };
 
+  /**
+   * TOTAL PRICE CALCULATION
+   * ------------------------
+   * Memoized for performance
+   *
+   * Logic:
+   * - Base = size × price × standard
+   * - Extra floors → +10%
+   * - Garage → fixed cost
+   */
   const total = useMemo(() => {
     let price = size * basePrice[type] * standardMultiplier[standard];
 
@@ -29,21 +71,31 @@ export default function CostCalculator() {
   }, [size, standard, type, floors, garage]);
 
   return (
-    <section id="calculator" className="bg-black text-white py-32 border-t border-white/10">
+    /* ================= CALCULATOR SECTION ================= */
+    <section id="calculator" className="
+      bg-black text-white
+      py-32
+      border-t border-white/10
+    ">
 
+      {/* ================= MAIN GRID ================= */}
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-20 items-start">
 
-        {/* LEFT — ROZBUDOWANY TEKST */}
+        {/* ================= LEFT CONTENT ================= */}
         <div>
+
+          {/* LABEL */}
           <p className="text-green-400 text-xs tracking-[0.3em] uppercase mb-6">
             Estimate
           </p>
 
+          {/* HEADLINE */}
           <h2 className="text-4xl md:text-5xl font-semibold leading-tight">
             Plan your investment<br />
             <span className="text-green-400">with confidence</span>
           </h2>
 
+          {/* DESCRIPTION BLOCK */}
           <div className="mt-8 space-y-6 text-gray-400 leading-relaxed">
 
             <p>
@@ -59,19 +111,16 @@ export default function CostCalculator() {
               impacts the final cost.
             </p>
 
-            
-
-           
-
           </div>
         </div>
 
-        {/* RIGHT — CALCULATOR */}
+        {/* ================= RIGHT CALCULATOR ================= */}
         <div className="bg-white/5 border border-white/10 rounded-xl p-8 space-y-8">
 
-          {/* TYPE */}
+          {/* ================= PROJECT TYPE ================= */}
           <div>
             <label className="text-sm text-gray-400">Project Type</label>
+
             <div className="flex gap-3 mt-2">
               {["house", "apartment", "commercial"].map((t) => (
                 <button
@@ -89,11 +138,12 @@ export default function CostCalculator() {
             </div>
           </div>
 
-          {/* SIZE */}
+          {/* ================= SIZE SLIDER ================= */}
           <div>
             <label className="text-sm text-gray-400">
               Size: <span className="text-white">{size} m²</span>
             </label>
+
             <input
               type="range"
               min="40"
@@ -104,9 +154,10 @@ export default function CostCalculator() {
             />
           </div>
 
-          {/* STANDARD */}
+          {/* ================= STANDARD ================= */}
           <div>
             <label className="text-sm text-gray-400">Standard</label>
+
             <div className="flex gap-3 mt-2">
               {["basic", "medium", "premium"].map((s) => (
                 <button
@@ -124,9 +175,10 @@ export default function CostCalculator() {
             </div>
           </div>
 
-          {/* FLOORS */}
+          {/* ================= FLOORS ================= */}
           <div>
             <label className="text-sm text-gray-400">Floors</label>
+
             <div className="flex gap-3 mt-2">
               {[1, 2].map((f) => (
                 <button
@@ -144,8 +196,9 @@ export default function CostCalculator() {
             </div>
           </div>
 
-          {/* GARAGE */}
+          {/* ================= GARAGE TOGGLE ================= */}
           <div className="flex items-center justify-between">
+
             <label className="text-sm text-gray-400">Garage</label>
 
             <button
@@ -162,7 +215,7 @@ export default function CostCalculator() {
             </button>
           </div>
 
-          {/* RESULT */}
+          {/* ================= RESULT ================= */}
           <div className="pt-6 border-t border-white/10">
 
             <p className="text-gray-400 text-sm mb-2">

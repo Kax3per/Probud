@@ -1,12 +1,47 @@
 import { useParams, Link } from "react-router-dom";
 import { useLayoutEffect } from "react";
 
+/**
+ * ProjectPage Component (Dynamic Project View)
+ * ---------------------------------------------
+ * Responsible for:
+ * - Rendering detailed project content based on URL param (id)
+ * - Handling scroll reset on page load
+ * - Displaying full project story (intro, visuals, gallery)
+ *
+ * Responsibilities:
+ * - Read route params and match project data
+ * - Provide fallback if project does not exist
+ * - Ensure proper UX when navigating between pages
+ *
+ * UX Concept:
+ * - Deep dive into a single project
+ * - Strong visual storytelling (hero + gallery)
+ * - Smooth navigation back to projects section
+ */
 export default function ProjectPage() {
+
+  /**
+   * ROUTE PARAM
+   * Used to determine which project to render
+   */
   const { id } = useParams();
-    useLayoutEffect(() => {
+
+  /**
+   * SCROLL RESET
+   * ----------------
+   * Ensures page starts from top when opened
+   */
+  useLayoutEffect(() => {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [])
+  }, []);
+
+  /**
+   * PROJECT DATA SOURCE
+   * ---------------------
+   * Static object storing all project content
+   */
   const projects = {
     house: {
       title: "Modern Family House",
@@ -81,59 +116,76 @@ export default function ProjectPage() {
     },
   };
 
-  
+  /**
+   * SELECT CURRENT PROJECT
+   */
   const project = projects[id];
 
-  if (!project) return <div className="text-white p-10">Project not found</div>;
+  /**
+   * FALLBACK UI
+   */
+  if (!project) {
+    return (
+      <div className="text-white p-10">
+        Project not found
+      </div>
+    );
+  }
 
   return (
+
+    /* ================= PROJECT PAGE ================= */
     <section className="bg-black text-white min-h-screen py-24">
+
       <div className="max-w-5xl mx-auto px-6">
 
-        {/* BACK → wraca do sekcji Projects */}
-          <Link
-            to="/"
-            state={{ goToProjects: true }}
-            className="text-green-400 mb-10 inline-block"
-          >
-            ← Back to Projects
+        {/* ================= BACK NAVIGATION ================= */}
+        <Link
+          to="/"
+          state={{ goToProjects: true }}
+          className="text-green-400 mb-10 inline-block"
+        >
+          ← Back to Projects
         </Link>
 
-        {/* Title */}
+        {/* ================= TITLE ================= */}
         <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
           {project.title}
         </h1>
 
-        {/* Intro */}
+        {/* ================= INTRO ================= */}
         <p className="text-gray-300 text-lg mb-12 leading-relaxed whitespace-pre-line">
           {project.intro}
         </p>
 
-        {/* Big image */}
+        {/* ================= HERO IMAGE ================= */}
         <img
           src={project.heroImg}
           alt=""
-          className="w-full h-[500px] object-cover rounded-xl mb-12"
+          className="w-full h-125 object-cover rounded-xl mb-12"
         />
 
-        {/* Long text */}
+        {/* ================= DESCRIPTION ================= */}
         <p className="text-gray-400 mb-16 leading-relaxed text-lg whitespace-pre-line">
           {project.description}
         </p>
 
-        {/* Gallery */}
+        {/* ================= GALLERY ================= */}
         <div className="grid md:grid-cols-2 gap-6">
+
           {project.gallery.map((img, i) => (
             <img
               key={i}
               src={img}
               alt=""
-              className="w-full h-[300px] object-cover rounded-xl hover:scale-105 transition"
+              className="w-full h-75 object-cover rounded-xl hover:scale-105 transition"
             />
           ))}
+
         </div>
 
       </div>
+
     </section>
   );
 }
